@@ -68,7 +68,7 @@ d3.json('airports.json', d3.autoType).then(data => {
       return d3.drag()
           .on("start", dragstarted)
           .on("drag", dragged)
-          .on("end", dragended);
+          .on("end", dragended); 
     }
 
 
