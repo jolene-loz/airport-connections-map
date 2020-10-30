@@ -75,7 +75,7 @@ d3.json("world-110m.json", d3.autoType)]).then(data=>{
       d3
       .scaleLinear()
       .domain(d3.extent(passengersList))
-      .range([4,9])
+      .range([3,7])
 
       let force = d3.forceSimulation(data[0].nodes)
       .force("charge", d3.forceManyBody().strength(-25))
