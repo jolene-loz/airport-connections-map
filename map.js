@@ -121,7 +121,6 @@ d3.json("world-110m.json", d3.autoType)]).then(data=>{
             return "translate(" + projection([d.longitude, d.latitude]) + ")";
           })
 
-      drag.filter(event => visType === "force")
 
     });
 
