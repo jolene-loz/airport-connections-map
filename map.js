@@ -1,5 +1,3 @@
-
-
 Promise.all([d3.json("airports.json"),
 d3.json("world-110m.json", d3.autoType)]).then(data=>{
     let airports = data[0]; // data1.csv
@@ -15,7 +13,6 @@ d3.json("world-110m.json", d3.autoType)]).then(data=>{
   const projection = d3.geoMercator()
     .fitExtent([[0,0], [width,height]], topojson.feature(worldmap, worldmap.objects.countries));
   
- 
   const path = d3.geoPath()
     .projection(projection);
   
@@ -35,3 +32,19 @@ d3.json("world-110m.json", d3.autoType)]).then(data=>{
     .attr("stroke-linejoin", "round")
     .attr("d", path);
 })
+
+// d3.selectAll("#map").on("change", event =>{
+//   visType = event.target.value
+//   switchLayout();
+// })
+
+function switchLayout(){
+  if (visType === "map"){
+    	// stop the simulation
+		// set the positions of links and nodes based on geo-coordinates
+		// set the map opacity to 1
+  } else { // force layout
+		// restart the simulation
+		// set the map opacity to 0
+	}
+}
