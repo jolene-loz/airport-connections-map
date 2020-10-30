@@ -20,12 +20,10 @@ d3.json("world-110m.json", d3.autoType)]).then(data=>{
       .attr("viewBox", [0,0,width,height]);
     
     d3.selectAll("input[name=display]").on("change", event =>{
-      // data1.csv
       visType = event.target.value
       console.log("vistype", visType)
       drawMap();
       switchLayout();
-      
     })
 
 
@@ -66,7 +64,7 @@ d3.json("world-110m.json", d3.autoType)]).then(data=>{
       // set the positions of links and nodes based on geo-coordinates
       //=== Nodes === 
 
-      var passengersList = []
+    var passengersList = []
       for (i = 0; i < data[0].nodes.length; i++) {
         passengersList.push(data[0].nodes[i].passengers);
       }
@@ -95,18 +93,12 @@ d3.json("world-110m.json", d3.autoType)]).then(data=>{
             .data(data[0].links)
             .enter()
             .append('line')
-            .attr('x1', (d)=> (d.source.x))
-            .attr('y1',(d) => (d.source.y))
-            .attr('x2', (d) => (d.target.x))
-            .attr('y2',(d) => (d.target.y))
             .attr('stroke', 'grey')
 
     let nodes = svg.selectAll('.chart')
             .data(data[0].nodes)
             .enter()
             .append('circle')
-            .attr('cx', (d,i)=>(d.x))
-            .attr('cy', (d,i)=>(d.y))
             .attr('fill', 'orange') 
             .attr('r',d=>circleScale(d.passengers))
     
