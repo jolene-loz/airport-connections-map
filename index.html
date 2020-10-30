@@ -9,12 +9,21 @@
         <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/normalize/8.0.1/normalize.css">
         <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/milligram/1.4.1/milligram.css">
         <script src="https://d3js.org/d3.v6.min.js"></script>
+        <script src="https://unpkg.com/topojson@3"></script>
+        <script src="nodes.js" defer type="module"></script>
+        <script type="text/javascript" src="map.js"></script>
 
     </head>
-    <body>
+    <!-- <body onload="update()"> -->
+        <div>
         <h1>Airport Connections</h1>
+     
+        <br />
+        
 
         <div id="node-link"></div>
-        </body>
-        <script src="./main.js" defer type="module"></script>
+        <!-- <div id="map-area"></div> -->
+    </div>
+        
+    
 </html>

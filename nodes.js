@@ -33,6 +33,8 @@ d3.json('airports.json', d3.autoType).then(data => {
       .attr("stroke", "black")
       .attr("class", "link")
     
+
+    
     //===Scale size with passengers ===
     const size = d3.scaleLinear()
       .domain(d3.extent(nodes, d=>d.passengers))
@@ -69,6 +71,7 @@ d3.json('airports.json', d3.autoType).then(data => {
           .on("end", dragended);
     }
 
+
     // === Define node ===
     let node = svg
       .selectAll(".node")
@@ -79,6 +82,10 @@ d3.json('airports.json', d3.autoType).then(data => {
       .attr("r", d=>d.r)
       .attr("fill", "orange")
       .call(drag(force));
+    
+    //=== Title for tooltip ===
+    node.append("title")
+      .text(d=>d.name);
      
     // === Update SVG elements with listener callback===
     force.on("tick", function() {
@@ -102,9 +109,5 @@ d3.json('airports.json', d3.autoType).then(data => {
           return d.target.y;
         });
     });
-
-
-
-
 
   })
