@@ -16,18 +16,18 @@ d3.json("world-110m.json", d3.autoType)]).then(data=>{
     const path = d3.geoPath()
       .projection(projection);
     
-    const svg = d3.select("body").append("svg")
+    const svg = d3.select(".chart-area").append("svg")
       .attr("viewBox", [0,0,width,height]);
     
     d3.selectAll("input[name=display]").on("change", event =>{
       // data1.csv
       visType = event.target.value
       console.log("vistype", visType)
-      
+      drawMap();
       switchLayout();
+      
     })
 
-  drawMap();
 
   function drawMap(){
     svg.selectAll("path")
@@ -45,49 +45,14 @@ d3.json("world-110m.json", d3.autoType)]).then(data=>{
   }
 
   function switchLayout(){
-    if (visType === "map"){
-      
-        // stop the simulation
-      // set the positions of links and nodes based on geo-coordinates
-      //=== Nodes === 
-      let nodes = data[0].nodes
-      let link = data[0].links
 
-      node.attr("cx", function(d) {
-        return projection([d.longitude, d.latitude])[0];
-      })
-
-      
-
-      svg
-        .selectAll(".node")
-        .data(nodes)
-        .enter()
-        .append("circle")
-        .attr("class", "node")
-        .attr("r", 5)
-        .attr("fill", "orange");
-
-        //=== Links === 
-        svg
-          .selectAll(".link")
-          .data(links)
-          .enter()
-          .append("line")
-          .attr("stroke", "black")
-          .attr("class", "link")
-
-      svg.selectAll("path")
-            .attr("opacity", 1);
-      
-
-      // set the map opacity to 1
-    } else { // force layout
-      console.log("Force")
-
-       
+    svg.selectAll(".node").each(function(d) {
+      d3.select(this).attr("transform", function(d) {
+        return "translate(" + projection([d.longitude, d.latitude]) + ")";
+      });
+    });
     //=== Force Simulation ===
-    let simulation = d3.forceSimulation(data[0].nodes)
+    let force = d3.forceSimulation(data[0].nodes)
     .force("charge", d3.forceManyBody().strength(-25))
     .force("link", d3.forceLink(data[0].links).distance(50))
     .force("center",d3.forceCenter()
@@ -95,9 +60,88 @@ d3.json("world-110m.json", d3.autoType)]).then(data=>{
         .y(height / 2)
     )
 
+    if (visType === "map"){
+      
+        // stop the simulation
+      // set the positions of links and nodes based on geo-coordinates
+      //=== Nodes === 
 
-    simulation.alpha(0.5).restart();
-      // set the map opacity to 0
+      var passengersList = []
+      for (i = 0; i < data[0].nodes.length; i++) {
+        passengersList.push(data[0].nodes[i].passengers);
+      }
+
+    console.log(passengersList)
+
+    let circleScale = 
+      d3
+      .scaleLinear()
+      .domain(d3.extent(passengersList))
+      .range([4,9])
+
+      let force = d3.forceSimulation(data[0].nodes)
+      .force("charge", d3.forceManyBody().strength(-25))
+      .force("link", d3.forceLink(data[0].links).distance(50))
+      .force("center",d3.forceCenter()
+          .x(width / 2)
+          .y(height / 2)
+      )
+
+    drag = force => {
+      drag.filter(event => visType === "force")
+  }
+
+    let links = svg.selectAll('.chart')
+            .data(data[0].links)
+            .enter()
+            .append('line')
+            .attr('x1', (d)=> (d.source.x))
+            .attr('y1',(d) => (d.source.y))
+            .attr('x2', (d) => (d.target.x))
+            .attr('y2',(d) => (d.target.y))
+            .attr('stroke', 'grey')
+
+    let nodes = svg.selectAll('.chart')
+            .data(data[0].nodes)
+            .enter()
+            .append('circle')
+            .attr('cx', (d,i)=>(d.x))
+            .attr('cy', (d,i)=>(d.y))
+            .attr('fill', 'orange') 
+            .attr('r',d=>circleScale(d.passengers))
+    
+    force.on("tick", () => {
+      links
+        .attr("x1", function(d) {
+          return projection([d.source.longitude, d.source.latitude])[0];
+        })
+        .attr("y1", function(d) {
+          return projection([d.source.longitude, d.source.latitude])[1];
+        })
+        .attr("x2", function(d) {
+          return projection([d.target.longitude, d.target.latitude])[0];
+        })
+        .attr("y2", function(d) {
+          return projection([d.target.longitude, d.target.latitude])[1];
+        });
+
+      nodes.attr("transform", function(d){
+            return "translate(" + projection([d.longitude, d.latitude]) + ")";
+          })
+
+      drag.filter(event => visType === "force")
+
+    });
+
+    nodes.append("title")
+    .text(d=>d.name);
+
+    svg.selectAll("path")
+          .attr("opacity", 1);
+
+    } else { 
+      console.log("Force")
+      force.alpha(0.5).restart();
       svg.selectAll("path")
             .attr("opacity", 0);
       

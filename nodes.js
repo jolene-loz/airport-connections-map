@@ -3,7 +3,7 @@ const margin = { top: 100, right: 20, bottom: 40, left: 90 }
 const width = 1000 - margin.left - margin.right
 const height = 600 - margin.top - margin.bottom; 
 
-let svg = d3.select("#node-link").append("svg")
+let svg = d3.select(".chart-area").append("svg")
     .attr("viewBox", [0,0,width,height]) 
   
 
@@ -33,8 +33,6 @@ d3.json('airports.json', d3.autoType).then(data => {
       .attr("stroke", "black")
       .attr("class", "link")
     
-
-    
     //===Scale size with passengers ===
     const size = d3.scaleLinear()
       .domain(d3.extent(nodes, d=>d.passengers))
@@ -45,7 +43,7 @@ d3.json('airports.json', d3.autoType).then(data => {
     })
 
 
-    //Drag functionality for nodes
+    // === Drag functionality for nodes === 
     let drag = simulation => {
   
       function dragstarted(event) {
