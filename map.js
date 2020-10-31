@@ -12,7 +12,7 @@ d3.json("world-110m.json", d3.autoType)]).then(data=>{
     //=== Initialization ===
     const margin = { top: 100, right: 20, bottom: 40, left: 90 }
     const width = 1000 - margin.left - margin.right
-    const height = 500 - margin.top - margin.bottom; 
+    const height = 600 - margin.top - margin.bottom; 
         
     const projection = d3.geoMercator()
       .fitExtent([[0,0], [width,height]], topojson.feature(worldmap, worldmap.objects.countries));
