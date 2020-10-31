@@ -10,21 +10,22 @@
         <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/milligram/1.4.1/milligram.css">
         <script src="https://d3js.org/d3.v6.min.js"></script>
         <script src="https://unpkg.com/topojson@3"></script>
-        <script src="nodes.js" defer type="module"></script>
-        <script type="text/javascript" src="map.js"></script>
+        <!-- <script src="nodes.js" defer type="module"></script> -->
+        <!-- <script type="text/javascript" src="map.js"></script> -->
+        <script defer src="map.js"></script>
 
     </head>
-        <div>
+        <body>
         <h1>Airport Connections</h1>
-
+        
         <input type="radio" id="force" name="display" value="force">
-        <label for="force">Force</label>
-        <input type="radio" id="map" name="display" value="map">
-        <label for="map">Map</label>
+            <label for="force">Force</label>
+            <input type="radio" id="map" name="display" value="map">
+            <label for="map">Map</label>
 
         <div class="chart-area"></div>
 
-    </div>
+    </body>
         
     
 </html>
