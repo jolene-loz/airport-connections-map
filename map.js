@@ -1,5 +1,8 @@
+
+
 Promise.all([d3.json("airports.json"),
 d3.json("world-110m.json", d3.autoType)]).then(data=>{
+  
     let airports = data[0]
     let worldmap = data[1];
     let airportNodes = airports.nodes
@@ -37,6 +40,8 @@ d3.json("world-110m.json", d3.autoType)]).then(data=>{
         .y(height / 2)
     )
 
+   
+
   // === Draws World Map ===
   function drawMap(){
     svg.selectAll("path")
@@ -53,10 +58,12 @@ d3.json("world-110m.json", d3.autoType)]).then(data=>{
       .attr("d", path);
   }
 
+  forceDiagram();
+
   d3.selectAll("input[name=display]").on("change", event =>{
     visType = event.target.value
     console.log("vistype", visType)
-    drawMap();
+    
     switchLayout();
   })
 
@@ -64,7 +71,7 @@ d3.json("world-110m.json", d3.autoType)]).then(data=>{
   function switchLayout(){
     // If selection is "Map"
     if (visType === "map"){
-
+      drawMap();
       //=== Nodes === 
       let mapSize = d3.scaleLinear()
         .domain(d3.extent(passengersList))
@@ -133,6 +140,22 @@ d3.json("world-110m.json", d3.autoType)]).then(data=>{
               .attr('cy', (d,i)=>(d.y))
               .attr('fill', 'orange') 
               .attr('r',d=>mapSize(d.passengers))
+              .on("mouseenter", (event, d) => {
+                const pos = d3.pointer(event, window)
+                d3.selectAll('.tooltip')
+                    .style('display','inline-block')
+                    .style('position','fixed')
+                    .style('top', pos[1]+'px')
+                    .style('left', pos[0]+'px')
+                    .html(
+                        d.name 
+                    )
+                })
+                .on("mouseleave", (event, d) => {
+                    d3.selectAll('.tooltip')
+                        .style('display','none')
+                    //console.log("HERE")
+                })
               .transition()
               .duration(1000)
               .attr("cx", function(d) {
@@ -141,6 +164,8 @@ d3.json("world-110m.json", d3.autoType)]).then(data=>{
               .attr("cy", function(d) {
                 return projection([d.longitude, d.latitude])[1];
               })
+ 
+
       
       svg.selectAll("path")
         .attr("opacity", 0);
@@ -180,7 +205,17 @@ d3.json("world-110m.json", d3.autoType)]).then(data=>{
 
     } else { 
 
-      svg.selectAll('.map').remove()
+      forceDiagram();
+
+      //=== Hide Map ===
+      svg.selectAll("path")
+            .attr("opacity", 0);
+    }
+
+  }
+
+  function forceDiagram(){
+    svg.selectAll('.map').remove()
       //If switch back to Force
       console.log("Force")
 
@@ -261,11 +296,6 @@ d3.json("world-110m.json", d3.autoType)]).then(data=>{
             return d.target.y;
           });
       });
-
-      //=== Hide Map ===
-      svg.selectAll("path")
-            .attr("opacity", 0);
-    }
   }
 
 })

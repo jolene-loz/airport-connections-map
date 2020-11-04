@@ -10,3 +10,10 @@ h2{
 p{
     display: flex;
 }
+
+.tooltip{
+    background-color: #4A5055;
+    color: white;
+    padding: 5px;
+    border-radius: 5px;
+}
