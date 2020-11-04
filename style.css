@@ -12,9 +12,10 @@ p{
 }
 
 .tooltip{
+    display:none;
     background-color: #4A5055;
     color: white;
     padding: 5px;
     border-radius: 5px;
-    display:none;
+    position: fixed;
 }
